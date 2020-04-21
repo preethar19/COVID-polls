@@ -79,40 +79,34 @@ server <- function(input, output) {
             geom_line(color = "darkgreen", lty = 2) +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-02-24"))) +
-            annotate("text", x = as.Date("2020-02-24"), y = 10, 
-                     label = "DOW J experiences worst 
-                     day in two years") +
+            annotate("text", x = as.Date("2020-02-24"), color = "red", y = 10, 
+                     label = "DOW J experiences\nworst day in\ntwo years") +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-03-06"))) +
-                annotate("text", x = as.Date("2020-03-06"), y = 70, 
-                         label = "$8.3 billion emergency 
-                         spending package signed") +
+            annotate("text", x = as.Date("2020-03-06"), color = "red", y = 60, 
+                         label = "$8.3 billion\nemergency\nspending package\nsigned") +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-03-13"))) +
-                annotate("text", x = as.Date("2020-03-13"), y = 10, 
-                         label = "Trump declares a national 
-                         state of emergency") +
+            annotate("text", x = as.Date("2020-03-13"), color = "red", y = 10, 
+                         label = "Trump declares\na national\nstate of\nemergency") +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-03-18"))) +
-                annotate("text", x = as.Date("2020-03-18"), y = 70, 
-                         label = "Families First Coronavirus 
-                         Response Act signed into law") +
+            annotate("text", x = as.Date("2020-03-18"), color = "red", y = 80, 
+                         label = "Families First\nCoronavirus\nResponse Act\nsigned into law") +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-03-24"))) +
-                annotate("text", x = as.Date("2020-03-24"), y = 10, 
-                         label = "DOW J surges by more 
-                         than 2,000 points") +
+            annotate("text", x = as.Date("2020-03-24"), color = "red", y = 10, 
+                         label = "DOW J surges\nby more\nthan 2,000\npoints") +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-03-27"))) +
-                annotate("text", x = as.Date("2020-03-27"), y = 70, 
-                         label = "Trump signs a $2 trillion 
-                         coronavirus economic stimulus bill") +
+            annotate("text", x = as.Date("2020-03-27"), color = "red", y = 60, 
+                         label = "Trump signs\n $2 trillion\ncoronavirus economic\nstimulus bill") +
             geom_vline(color = "red", 
                        xintercept = as.numeric(as.Date("2020-04-11"))) +
-                annotate("text", x = as.Date("2020-04-11"), y = 10, 
-                         label = "The United States becomes 
-                         the worst-hit country in the world") +
+            annotate("text", x = as.Date("2020-04-11"), color = "red", y = 10, 
+                         label = "US becomes\nthe worst-hit country\nin the world") +
             ylim(0,100) +
+            xlim(as.Date("2020-02-02"), as.Date("2020-04-17")) +
             labs(x = "poll's starting date", y = "proportion approve") +
             theme_bw()
             #theme(legend.position = "bottom") +
