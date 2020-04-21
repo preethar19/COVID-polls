@@ -7,10 +7,18 @@ library(readr)
 covid_approval_polls_adjusted <- read_csv("/cloud/project/covid_approval_polls_adjusted.csv")
 
 covid_approval_polls_adjusted <- covid_approval_polls_adjusted %>% 
-    mutate(startdate = as.Date(startdate, "%m/%d/%Y"))
+    mutate(startdate = as.Date(startdate, "%m/%d/%Y")) %>% 
+    mutate(enddate = as.Date(enddate, "%m/%d/%Y")) 
 
 covid_approval_polls_adjusted <- covid_approval_polls_adjusted %>% 
-    mutate(enddate = as.Date(enddate, "%m/%d/%Y"))
+    mutate(
+        party = case_when(
+            party == "D" ~ "Democrat",
+            party == "R" ~ "Republican",
+            party == "I" ~ "Independent",
+            party == "all" ~ "All parties"
+        )
+    )
 
 pollsters <- covid_approval_polls_adjusted %>% 
     count(pollster) %>% 
@@ -19,12 +27,12 @@ pollsters <- covid_approval_polls_adjusted %>%
 
 party <- covid_approval_polls_adjusted %>% 
     count(party) %>% 
-    pull(party) %>% 
+    pull(party) %>%
     as.character()
 
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(theme = shinytheme("yeti"),
+ui <- fluidPage(theme = shinytheme("cosmo"),
 
     # Application title
     titlePanel("Trump Approval Ratings during COVID-19"),
@@ -34,7 +42,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
         sidebarPanel(
             
             dateRangeInput(inputId = "daterange",
-                           label   = "Enter poll start range",
+                           label   = "Enter poll date range",
                            start   = "2020-02-02",
                            end     = "2020-04-17",
                            min     = "2020-02-02",
@@ -75,45 +83,41 @@ server <- function(input, output) {
             filter(pollster == input$pollster) %>% 
             filter(party == input$party) %>% 
             ggplot(aes(x = startdate, y = approve_adjusted)) +
-            geom_point(color = "darkgreen", size = 2) +
+            geom_point(color = "darkgreen", size = 2, alpha = 0.5) +
             geom_line(color = "darkgreen", lty = 2) +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-02-24"))) +
-            annotate("text", x = as.Date("2020-02-24"), color = "red", y = 10, 
+                annotate("text", x = as.Date("2020-02-24"), color = "red", alpha = 0.7, y = 10, 
                      label = "DOW J experiences\nworst day in\ntwo years") +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-03-06"))) +
-            annotate("text", x = as.Date("2020-03-06"), color = "red", y = 60, 
+                annotate("text", x = as.Date("2020-03-06"), color = "red", alpha = 0.7, y = 60, 
                          label = "$8.3 billion\nemergency\nspending package\nsigned") +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-03-13"))) +
-            annotate("text", x = as.Date("2020-03-13"), color = "red", y = 10, 
+                annotate("text", x = as.Date("2020-03-13"), color = "red", alpha = 0.7, y = 10, 
                          label = "Trump declares\na national\nstate of\nemergency") +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-03-18"))) +
-            annotate("text", x = as.Date("2020-03-18"), color = "red", y = 80, 
+                annotate("text", x = as.Date("2020-03-18"), color = "red", alpha = 0.7, y = 80, 
                          label = "Families First\nCoronavirus\nResponse Act\nsigned into law") +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-03-24"))) +
-            annotate("text", x = as.Date("2020-03-24"), color = "red", y = 10, 
+                annotate("text", x = as.Date("2020-03-24"), color = "red", alpha = 0.7, y = 10, 
                          label = "DOW J surges\nby more\nthan 2,000\npoints") +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-03-27"))) +
-            annotate("text", x = as.Date("2020-03-27"), color = "red", y = 60, 
+                annotate("text", x = as.Date("2020-03-27"), color = "red", alpha = 0.7, y = 60, 
                          label = "Trump signs\n $2 trillion\ncoronavirus economic\nstimulus bill") +
-            geom_vline(color = "red", 
+            geom_vline(color = "red", alpha = 0.4,
                        xintercept = as.numeric(as.Date("2020-04-11"))) +
-            annotate("text", x = as.Date("2020-04-11"), color = "red", y = 10, 
+                annotate("text", x = as.Date("2020-04-11"), color = "red", alpha = 0.7, y = 10, 
                          label = "US becomes\nthe worst-hit country\nin the world") +
             ylim(0,100) +
             xlim(as.Date("2020-02-02"), as.Date("2020-04-17")) +
             labs(x = "poll's starting date", y = "proportion approve") +
             theme_bw()
-            #theme(legend.position = "bottom") +
-            #scale_color_identity(name = "Trump approval", 
-                                 #breaks = c("green", "red"),
-                                 #labels = c("approve", "disapprove"),
-                                 #guide = "legend") 
+
     }) 
     
     output$tablepolls <- DT::renderDataTable({
