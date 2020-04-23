@@ -31,6 +31,8 @@ party <- covid_approval_polls_adjusted %>%
     pull(party) %>%
     as.character()
 
+x <- c("x", "y", "z", "a", "b", "c")
+
 
 # Define UI for application 
 ui <- fluidPage(theme = shinytheme("united"),
